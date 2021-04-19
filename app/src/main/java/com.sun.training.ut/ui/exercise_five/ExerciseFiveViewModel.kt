@@ -1,6 +1,5 @@
 package com.sun.training.ut.ui.exercise_five
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import com.sun.training.ut.data.Constant
 import com.sun.training.ut.data.Constant.DEFAULT_PRICE
@@ -15,29 +14,33 @@ class ExerciseFiveViewModel : BaseViewModel() {
     val discountLiveData: MutableLiveData<String> = MutableLiveData()
 
     fun calculateCouponWithPizza() {
-        val typeDelivery =
-            if (isDelivery) Constant.TypeDelivery.DELIVERY else Constant.TypeDelivery.RECEIVE_AT_STORE
-        val pizza = Pizza(
-            bill = totalPrice,
-            typeDelivery = typeDelivery,
-            isCoupon = isVoucher
-        )
-        var discount = ""
+        if (totalPrice > 0) {
+            val typeDelivery =
+                if (isDelivery) Constant.TypeDelivery.DELIVERY else Constant.TypeDelivery.RECEIVE_AT_STORE
+            val pizza = Pizza(
+                bill = totalPrice,
+                typeDelivery = typeDelivery,
+                isCoupon = isVoucher
+            )
+            var discount = ""
 
-        if (pizza.bill > DEFAULT_PRICE) {
-            discount += Constant.Coupon.POTATO_PROMOTION.coupon
-        }
-
-        discount += if (pizza.typeDelivery == Constant.TypeDelivery.DELIVERY) {
-            if (pizza.isCoupon) {
-                Constant.Coupon.OFF_20.coupon
-            } else {
-                Constant.Coupon.REGULAR_FEE.coupon
+            if (pizza.bill > DEFAULT_PRICE) {
+                discount += Constant.Coupon.POTATO_PROMOTION.coupon
             }
+
+            discount += if (pizza.typeDelivery == Constant.TypeDelivery.DELIVERY) {
+                if (pizza.isCoupon) {
+                    Constant.Coupon.OFF_20.coupon
+                } else {
+                    Constant.Coupon.REGULAR_FEE.coupon
+                }
+            } else {
+                Constant.Coupon.PIZZA_SECOND_FREE.coupon
+            }
+            discountLiveData.postValue(discount)
         } else {
-            Constant.Coupon.PIZZA_SECOND_FREE.coupon
+            discountLiveData.postValue("")
         }
-        discountLiveData.postValue(discount)
     }
 
     fun onChangedDelivery(isChecked: Boolean) {
