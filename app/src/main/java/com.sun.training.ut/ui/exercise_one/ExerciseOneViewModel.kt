@@ -15,15 +15,16 @@ class ExerciseOneViewModel : BaseViewModel() {
     fun calculatePrice() {
         val beer = Beer(isVoucher, isTimeCoupon, numberBeer)
         val priceOfBeer = when {
-            beer.isVoucher -> {
-                Constant.VOUCHER_PRICE
-            }
             beer.isTimeCoupon -> {
                 Constant.TIME_PRICE
             }
             else -> Constant.REGULAR_PRICE
         }
-        val total = priceOfBeer * beer.numberBeer
+        val total = if(isVoucher) {
+            100 + (priceOfBeer * (beer.numberBeer-1) )
+        } else {
+            priceOfBeer * beer.numberBeer
+        }
         priceLiveData.postValue(total)
     }
 
