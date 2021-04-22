@@ -13,7 +13,7 @@ import java.time.temporal.ChronoField
 
 class ExerciseFourViewModel : BaseViewModel() {
     val colorLiveData: MutableLiveData<String> = MutableLiveData()
-    private var holidays = arrayOf("2/9", "1/1", "30/4", "1/5")
+    private var holidays = arrayOf("2/9", "1/1", "30/4", "1/5", "3/10", "4/10") // 3/10: fake holidays in saturday, 4/10 fake holidays in sunday
     private var dayOfMonth: Int = 0
     private var monthOfYear: Int = 0
 
